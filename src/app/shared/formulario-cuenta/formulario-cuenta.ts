@@ -44,16 +44,17 @@ export class FormularioCuenta {
       contenido.set('email', this.formCuenta.value.email ?? '');
       contenido.set('comentario', this.formCuenta.value.comentar ?? '');
 
-      // Petición a través de la red (Promesa)
+     
       fetch('/', {
         method: 'POST',
         headers: { "Content-Type": "application/x-www-form-urlencoded" },
         body: contenido.toString()
       })
       .then(() => {
-        console.log(`La cuenta creada es ${JSON.stringify(this.formCuenta.value)}`);
-        alert('Registro exitoso');
+        alert("enviado con exito")
         this.formCuenta.reset();
+      console.log('datos enviados: ${contenido}');
+
       })
       .catch((error) => {
         console.error("Error al enviar los datos:", error);

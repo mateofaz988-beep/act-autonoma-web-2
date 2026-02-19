@@ -25,7 +25,7 @@ export const routes: Routes = [
     { path: 'cuenta', component: FormularioCuenta },
     { path: 'login', component: Login }
 ];
-
+ 
 /*Antes: Cargaba el componente Usuarios directamente al inicio (Eager Loading).
 Ahora:
 Se eliminó el import { Usuarios } ... del principio.

@@ -1,7 +1,7 @@
 import { TestBed } from '@angular/core/testing';
 import { CanActivateFn } from '@angular/router';
-
-import { canloadGuard } from './canload-guard';
+// Importación vital para que el test reconozca al guardia
+import { canloadGuard } from './canload-guard'; 
 
 describe('canloadGuard', () => {
   const executeGuard: CanActivateFn = (...guardParameters) => 
