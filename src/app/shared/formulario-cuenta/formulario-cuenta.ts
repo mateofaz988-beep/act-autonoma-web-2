@@ -1,52 +1,64 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject, input } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { AbstractControl, FormBuilder, ReactiveFormsModule, ValidationErrors, Validators } from '@angular/forms';
-import { email } from '@angular/forms/signals';
 
 @Component({
   selector: 'app-formulario-cuenta',
+  standalone: true,
   imports: [CommonModule, ReactiveFormsModule],
   templateUrl: './formulario-cuenta.html',
   styleUrl: './formulario-cuenta.css',
 })
 export class FormularioCuenta {
-
   private fb = inject(FormBuilder);
 
   reglaEmail = '^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$';
-  reglaPassword = '^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d]{8,}$';
 
-  formCuenta = this.fb.group(
-    {
-      email: ['', [Validators.required, Validators.pattern(this.reglaEmail)]],
-      password: ['', [Validators.required, Validators.pattern(this.reglaPassword)]],
-      repeatPassword: ['', [Validators.required]]
-    },
-    { validators: this.validarClaves },
-  );
-
-  //Método para la validacion
+  // 1. Definimos la validación primero para evitar el error de "used before its initialization"
   validarClaves(control: AbstractControl): ValidationErrors | null {
     const clave1 = control.get('password')?.value;
     const clave2 = control.get('repeatPassword')?.value;
-
     return clave1 === clave2 ? null : { noCoinciden: true };
   }
 
-  //Método para mostrar los errores personalizados
+  // 2. Inicializamos el formulario con los campos correctos
+  formCuenta = this.fb.group(
+    {
+      email: ['', [Validators.required, Validators.pattern(this.reglaEmail)]],
+      comentar: ['', [Validators.required]] 
+    },
+    { validators: this.validarClaves.bind(this) }
+  );
+
   mostrarError(campo: string, tipoError: string): boolean {
     const input = this.formCuenta.get(campo);
-
-    if (input && input.invalid && input.touched) {
-      return input.hasError(tipoError);
-    }
-    return false;
+    return !!(input && input.invalid && input.touched && input.hasError(tipoError));
   }
 
-  enviarRegistro() {
+  // Lógica de envío a Netlify
+  registrar() {
     if (this.formCuenta.valid) {
-      console.log(`La cuenta creada es ${this.formCuenta}.value`);
-      alert('✨ ¡Registro Exitoso! Bienvenido a la familia Visual. 🐾');
+      // Formateamos los datos para que Netlify los reconozca
+      const contenido = new URLSearchParams();
+      contenido.set('form-name', 'contacto');
+      contenido.set('email', this.formCuenta.value.email ?? '');
+      contenido.set('comentario', this.formCuenta.value.comentar ?? '');
+
+      // Petición a través de la red (Promesa)
+      fetch('/', {
+        method: 'POST',
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        body: contenido.toString()
+      })
+      .then(() => {
+        console.log(`La cuenta creada es ${JSON.stringify(this.formCuenta.value)}`);
+        alert('Registro exitoso');
+        this.formCuenta.reset();
+      })
+      .catch((error) => {
+        console.error("Error al enviar los datos:", error);
+        alert('Hubo un error al enviar el mensaje.');
+      });
     }
   }
 }

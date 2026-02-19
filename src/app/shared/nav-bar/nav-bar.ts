@@ -1,17 +1,16 @@
-import { Component, inject } from '@angular/core'; // 1. Quitamos 'Input' que no se usa
+import { Component, inject } from '@angular/core'; 
 import { Router, RouterLink } from "@angular/router";
-import { AuthService } from '../../services/auth-service'; // 2. Importamos el servicio
+import { AuthService } from '../../services/auth-service'; 
 
 @Component({
   selector: 'app-nav-bar',
   imports: [RouterLink],
   templateUrl: './nav-bar.html',
-  // styleUrl: './nav-bar.css', // 3. Comentamos o borramos esto porque el archivo no existe
+
 })
 export class NavBar {
 
-  // 4. ¡ESTA ES LA LÍNEA QUE TE FALTA! 
-  // Sin esto, el HTML no puede saber si hay sesión iniciada
+
   authService = inject(AuthService); 
   
   private router = inject(Router);

@@ -14,4 +14,5 @@ export const candloadGuard: CanMatchFn = (route, segments) => {
   return false;
 };
 
-//Es el "portero". Contiene la lógica CanMatchFn que verifica si sesionIniciada() es verdadera. Si no lo es, bloquea la descarga del código y redirige al login.
+//Es el "portero". Contiene la lógica CanMatchFn que verifica si sesionIniciada() es verdadera.
+//  Si no lo es, bloquea la descarga del código y redirige al login.

@@ -3,6 +3,11 @@ import { User } from 'firebase/auth'; // Eliminada la importación errónea de '
 import { UsuarioService } from './usuario-service';
 import { map, Observable } from 'rxjs';
 
+/*Cambio: Se modernizó para usar Signals (Señales).
+sesionIniciada ahora es una señal reactiva (signal<boolean>) conectada al localStorage.
+Se corrigió la función login para actualizar estas señales y guardar la sesión.
+Se limpiaron importaciones erróneas.*/
+
 @Injectable({
   providedIn: 'root',
 })
@@ -47,7 +52,3 @@ export class AuthService {
     this.rolActual.set(null);
   }
 }
-/*Cambio: Se modernizó para usar Signals (Señales).
-sesionIniciada ahora es una señal reactiva (signal<boolean>) conectada al localStorage.
-Se corrigió la función login para actualizar estas señales y guardar la sesión.
-Se limpiaron importaciones erróneas.*/
